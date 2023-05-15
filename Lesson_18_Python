@@ -1,0 +1,107 @@
+Задание №1
+class Person:
+ def init(self, name, age, surname):
+     self.__name = name
+     self.__age = age
+     self.__surname = surname
+     
+ def name(self):
+     return self.__name
+    
+ def age(self):
+     return self.__age
+    
+ def surname(self):
+     return self.__surname
+    
+ def set_age(self, age):
+     self.__age = age
+     
+
+person1 = Person("John", 30, "Doe")
+print(person1.name())
+print(person1.age())
+print(person1.surname())
+person1.set_age(35)
+print(person1.age())
+
+Задание №2
+from abc import ABC, abstractmethod
+
+class Cloth(ABC):
+ reserved = 0
+    
+ def init(self, name):
+     self.name = name
+     
+ @abstractmethod
+ def fabric_required(self):
+     pass
+    
+ @property
+ def total_fabric_required(self):
+     return self.fabric_required() + self.reserved
+
+class Coat(Cloth):
+ def init(self, name, size):
+     super().init(name)
+     self.size = size
+     
+ def fabric_required(self):
+     return self.size / 6.5 + 0.5
+
+class Suit(Cloth):
+ def init(self, name, height):
+     super().init(name)
+     self.height = height
+     
+ def fabric_required(self):
+     return 2 * self.height + 0.3
+
+coat1 = Coat('Пальто', 52)
+suit1 = Suit('Костюм', 175)
+
+print(coat1.total_fabric_required)
+print(suit1.total_fabric_required)
+
+Cloth.reserved = 10
+
+print(coat1.total_fabric_required)
+print(suit1.total_fabric_required)
+
+Задание №3
+import random
+
+class Box:
+ def init(self, postcode, name, from_city, target_city):
+     self.__postcode = postcode
+     self.__name = name
+     self.__from_city = from_city
+     self.__target_city = target_city
+    
+ def get_postcode(self):
+     return self.__postcode
+    
+ def get_name(self):
+     return self.__name
+    
+ def get_from_city(self):
+     return self.__from_city
+    
+ def get_target_city(self):
+     return self.__target_city
+    
+ def set_target_city(self, target_city):
+     self.__target_city = target_city
+
+box1 = Box('66', 'John', 'New York', 'Los Angeles')
+
+print(box1.get_postcode())
+print(box1.get_name())
+print(box1.get_from_city())
+print(box1.get_target_city())
+
+box1.set_target_city('San Francisco')
+print(box1.get_target_city())
+
+

@@ -1,0 +1,68 @@
+use fitness_club
+
+-- Простые запросы
+
+-- клубы, работающие в городе.
+
+SELECT
+ c.full_name
+FROM
+ provider c
+where c.city is not null;
+-- Названия имён клиентов начинающиеся на «А»
+
+select 
+	a.name
+from 
+	buyer a
+where a.name like "A%"
+
+-- Запросы с агрегациями
+-- клуб из Бразилии
+SELECT
+ COUNT(c.surname) AS NameCountStartsWithB
+FROM
+ staff c
+WHERE
+ surname  LIKE 'B%'
+
+select
+	any_value(concat(c.name, " ", c.surname)) as Fullname,
+	c.Country
+from
+	staff c
+where c.Country = 'Brazil'
+
+
+-- Сложные запросы с объединением 2-3 таблиц с помощью Join 2-3
+-- Получить список всех абонементов, содержащих условия с ценой выше средней:
+
+SELECT c.* FROM contract c
+JOIN store_product sp ON c.store_product_id_store_product = sp.id_store_product
+WHERE sp.price > (SELECT AVG(price) FROM store_product);
+
+-- Получить список всех клиентов:
+
+SELECT d.name, d.surname, s.nomer_shop, s.name AS shop_name 
+FROM director d
+JOIN shop s ON d.id_director = s.director_id_director;
+
+-- Сложные запросы с объединением 2-3 таблиц подзапросами 2-3
+-- Получить список всех клубов, в которых когда-либо продавались абонементы в городе "Sterlingside":
+
+SELECT s.nomer_club, s.name FROM club s
+JOIN store_product sp ON s.id_shop = sp.shop_id_shop
+JOIN provider p ON sp.provider_id_provider = p.id_provider
+WHERE p.city = 'Sterlingside';
+-- Вывести информацию о клиентах, совершивших покупки в конкретном клубе:
+-- Вывести список всех продуктов, продающихся в магазинах, и общее количество товара в каждом магазине: 
+SELECT 
+	s.name AS shop_name,
+	sp.name_product,
+	SUM(sp.price) AS total_price, 
+	SUM(contract.store_product_id_store_product) AS total_quantity 
+FROM 
+	shop s 
+JOIN store_product sp ON s.id_shop = sp.shop_id_shop 
+JOIN contract ON sp.id_store_product = contract.store_product_id_store_product 
+GROUP BY s.id_shop, sp.id_store_product;
